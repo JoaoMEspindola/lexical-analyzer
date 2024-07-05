@@ -1,5 +1,4 @@
 class ReservedWord:
-
     def __init__(self, words) -> None:
         self.words = words
 

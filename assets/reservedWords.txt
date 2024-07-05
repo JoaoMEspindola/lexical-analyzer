@@ -1,0 +1,13 @@
+int
+float
+char
+bool
+void
+if
+else
+for
+while
+scanf
+printf
+main
+return
