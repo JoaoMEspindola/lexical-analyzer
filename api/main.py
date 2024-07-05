@@ -1,12 +1,10 @@
 import dataReader
-import reservedWord
-import arithmeticOperator
-import comparisonOperator
-import logicalOperator
-import specialSymbol
+import regexPatterns
 
-reservedWords = reservedWord.ReservedWord(dataReader.readFileAndTokenizeWords("./assets/reservedWords.txt"))
-arithmeticOperators = arithmeticOperator.ArithmeticOperator(dataReader.readFileAndTokenizeWords("./assets/arithmeticOperators.txt"))
-comparisonOperators = comparisonOperator.ComparisonOperator(dataReader.readFileAndTokenizeWords("./assets/comparisonOperators.txt"))
-logicalOperators = logicalOperator.LogicalOperator(dataReader.readFileAndTokenizeWords("./assets/logicalOperators.txt"))
-specialSymbols = specialSymbol.SpecialSymbol(dataReader.readFileAndTokenizeWords("./assets/specialSymbols.txt"))
+patterns = regexPatterns.RegexPatterns()
+code = dataReader.readFullFile("./assets/test.txt")
+
+
+print("Palavras Reservadas:", patterns.match_reserved_words(code))
+print("Operadores:", patterns.match_operators(code))
+print("Símbolos Especiais:", patterns.match_special_symbols(code))
