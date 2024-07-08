@@ -1,7 +1,5 @@
-if (x >= y){// tnccefet
+if (x >= y){
     y = 5;
 }
 
 string a = "teste"
-
-//somente um comentario
