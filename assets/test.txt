@@ -3,3 +3,7 @@ if (x >= y){
 }
 
 string a = "teste"
+
+// comentario muito legal
+
+int a = 1;
