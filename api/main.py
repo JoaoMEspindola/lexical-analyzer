@@ -1,6 +1,7 @@
 import dataReader
 import regexPatterns
 import displayData
+import re
 
 def treatComment(code, initialIndex):
     commentLine = code[initialIndex:]
@@ -14,6 +15,24 @@ def treatComment(code, initialIndex):
 
     finalIndex = initialIndex + len(onlyCommentLine)
     return onlyCommentLine, finalIndex
+
+def isUnaccepted(token):
+    if re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', token) == None:
+        return False
+
+    return True
+
+def isAcceptedVariable(token, patterns, list_tokens):
+    if patterns.match_reserved_words(list_tokens[-1]) and token[0].isdigit():
+        print("Error: Variable starting with a digit.")
+        return False
+    
+    if patterns.match_reserved_words(list_tokens[-1]) and isUnaccepted(token):
+        print("Error: Variable has unaccepted char.")
+        return False
+    
+    return True
+    
 
 patterns = regexPatterns.RegexPatterns()
 code = dataReader.readFullFile("../assets/test.txt")
@@ -45,13 +64,16 @@ for c in code:
                 if patterns.match_reserved_words(token):
                     list_tokens.append(token)    
                 else:
-                    id += 1
-                    if not token in symbol_table:
-                        symbol_table[token] = id
-                    else:
-                        id -= 1
+                    if not isAcceptedVariable(token, patterns, list_tokens):
+                        break
+                    else: 
+                        id += 1
+                        if not token in symbol_table:
+                            symbol_table[token] = id
+                        else:
+                            id -= 1
 
-                    list_tokens.append(f"'id': {symbol_table[token]}")
+                        list_tokens.append(f"'id': {symbol_table[token]}")
                 token = ''
             if patterns.match_operators(c) or patterns.match_special_symbols(c):
                 list_tokens.append(c)

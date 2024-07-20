@@ -1,8 +1,10 @@
+int 1ç@ = 12;
+
 if (x >= y){
     y = 5;
 }
 
-string a = "teste"
+string 5tg = "teste"
 
 // comentario muito legal
 
