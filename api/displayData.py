@@ -11,8 +11,8 @@ def displayResult(lista_tokens, tabela_simbolos):
     root = tk.Tk()
     root.title("Resultado")
 
-    frame_tokens = ttk.Frame(root)
-    frame_tokens.pack(padx=10, pady=10)
+    frame_tokens = ttk.Frame(root, width=400, height=300)
+    frame_tokens.pack(padx=10, pady=10, fill='both', expand=True)
 
     ttk.Label(frame_tokens, text="Lista de tokens").pack()
 
@@ -25,10 +25,10 @@ def displayResult(lista_tokens, tabela_simbolos):
     for index, row in tabela_tokens.iterrows():
         tree_tokens.insert('', 'end', text='', values=(row['Número'], row['Token']))
 
-    tree_tokens.pack()
+    tree_tokens.pack(fill='both', expand=True)
 
-    frame_simbolos = ttk.Frame(root)
-    frame_simbolos.pack(padx=10, pady=10)
+    frame_simbolos = ttk.Frame(root, width=400, height=300)
+    frame_simbolos.pack(padx=10, pady=10, fill='both', expand=True)
 
     ttk.Label(frame_simbolos, text="Tabela de Símbolos").pack()
 
@@ -41,5 +41,5 @@ def displayResult(lista_tokens, tabela_simbolos):
     for index, row in tabela_simbolos_formatada.iterrows():
         tree_simbolos.insert('', 'end', text='', values=(row['Símbolo'], row['Valor']))
 
-    tree_simbolos.pack()
+    tree_simbolos.pack(fill='both', expand=True)
     root.mainloop()

@@ -26,8 +26,10 @@ def isAcceptedVariable(token, patterns, list_tokens):
     if patterns.match_reserved_words(list_tokens[-1]) and token[0].isdigit():
         print("Error: Variable starting with a digit.")
         return False
-    
-    if patterns.match_reserved_words(list_tokens[-1]) and isUnaccepted(token):
+
+    if patterns.match_reserved_words(list_tokens[-1]) == True and isUnaccepted(token):
+        print(patterns.match_reserved_words(list_tokens[-1]) == True)
+        print(isUnaccepted(token))
         print("Error: Variable has unaccepted char.")
         return False
     
@@ -51,7 +53,7 @@ for c in code:
         foundComment = True
         diff = finalIndex - index
         last_char = ''
-        list_tokens.append('/')
+        list_tokens[-1] = "//"
         list_tokens.append(onlyCommentLine)
     
     last_char = c
