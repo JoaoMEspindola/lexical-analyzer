@@ -1,9 +1,6 @@
-if (x >= y){
-    y = 5;
+main () {
+int x;
+    while(true){
+        x = 10;
+    }
 }
-
-string g = "teste"
-
-// comentario muito legal
-
-int a = 1;

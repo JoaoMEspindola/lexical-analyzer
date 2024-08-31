@@ -1,6 +1,7 @@
 {
     "python.analysis.extraPaths": [
         "./api/classes",
-        "./api/data"
+        "./api/data",
+        "./api/lexical"
     ]
 }
