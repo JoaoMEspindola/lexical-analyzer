@@ -1,6 +1,12 @@
-main () {
-int x;
+int a(int b) {
+    int x, a;
+}
+
+main() {
+    if(x) {
+        z = a + x;
+    }
     while(true){
         x = 10;
-    }
+    }
 }

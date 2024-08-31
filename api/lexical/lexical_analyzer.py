@@ -24,11 +24,11 @@ def lexical_analysis(file):
         def isAcceptedVariable(token, patterns, list_tokens):
             if patterns.match_reserved_words(list_tokens[-1]) and token[0].isdigit():
                 print("Error: Variable starting with a digit.")
-                return False
+                return None
 
             if patterns.match_reserved_words(list_tokens[-1]) and not isUnaccepted(token):
                 print("Error: Variable has unaccepted char.")
-                return False
+                return None
             
             return True
 
@@ -63,7 +63,7 @@ def lexical_analysis(file):
                             list_tokens.append(token)    
                         else:
                             if not isAcceptedVariable(token, patterns, list_tokens):
-                                return False
+                                return None
                             else: 
                                 id += 1
                                 if token not in symbol_table:
@@ -88,4 +88,4 @@ def lexical_analysis(file):
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return False
+        return None

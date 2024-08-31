@@ -1,7 +1,3 @@
-# calculation of first
-# epsilon is denoted by '#' (semi-colon)
- 
-# pass rule in first function
 def first(rule):
     global rules, nonterm_userdef, \
         term_userdef, diction, firsts
@@ -93,12 +89,6 @@ def follow(nt):
                         # if epsilon in result apply rule
                         # - (A->aBX)- follow of -
                         # - follow(B)=(first(X)-{ep}) U follow(A)
-                        if type(res) == list:
-                            if None in res:
-                                continue
-                        else:
-                            if res is None:
-                                continue
                         if '#' in res:
                             newList = []
                             res.remove('#')
@@ -138,6 +128,13 @@ def computeAllFirsts():
         k[1] = k[1].strip()
         rhs = k[1]
         multirhs = rhs.split('|')
+        if '' in multirhs:
+            i = 0
+            while i < len(multirhs) - 1:
+                if multirhs[i] == "" and multirhs[i+1] == "":
+                    multirhs[i] = "||"
+                    del multirhs[i+1]  # Remove a string vazia seguinte
+                i += 1
         # remove un-necessary spaces
         for i in range(len(multirhs)):
             multirhs[i] = multirhs[i].strip()
@@ -150,6 +147,7 @@ def computeAllFirsts():
  
     # calculate first for each rule
     # - (call first() on all RHS)
+
     for y in list(diction.keys()):
         t = set()
         for sub in diction.get(y):
@@ -181,8 +179,6 @@ def computeAllFollows():
         sol = follow(NT)
         if sol is not None:
             for g in sol:
-                if g is None:
-                    continue
                 solset.add(g)
         follows[NT] = solset
  
@@ -245,11 +241,9 @@ def createParseTable():
         rhs = diction[lhs]
         for y in rhs:
             res = first(y)
-            if res is None:
-                continue
-
             # epsilon is present,
             # - take union with follow
+            
             if '#' in res:
                 if type(res) == str:
                     firstFollow = []
@@ -258,7 +252,7 @@ def createParseTable():
                         firstFollow.append(fol_op)
                     else:
                         for u in fol_op:
-                            firstFollow.append(u)
+                            firstFollow.append(u)                            
                     res = firstFollow
                 else:
                     res.remove('#')
@@ -279,22 +273,27 @@ def createParseTable():
                     # if rule already present
                     if f"{lhs}->{y}" in mat[xnt][yt]:
                         continue
-                    else:
-                        grammar_is_LL = False
-                        mat[xnt][yt] = mat[xnt][yt] \
-                                       + f",{lhs}->{' '.join(y)}"
  
     # final state of parse table
-    print("\nGenerated parsing table:\n")
-    frmt = "{:>12}" * len(terminals)
-    print(frmt.format(*terminals))
+    # print("\nGenerated parsing table:\n")
+    # frmt = "{:>12}" * len(terminals)
+    # print(frmt.format(*terminals))
  
-    j = 0
-    for y in mat:
-        frmt1 = "{:>12}" * len(y)
-        print(f"{ntlist[j]} {frmt1.format(*y)}")
-        j += 1
- 
+    # j = 0
+    # for y in mat:
+    #     frmt1 = "{:>1}" * len(y)
+    #     print(f"{ntlist[j]} {frmt1.format(*y)}")
+    #     j += 1 
+
+    # import pandas as pd
+
+    # # Crie um DataFrame com os dados da tabela de parsing
+    # df = pd.DataFrame(mat, columns=terminals, index=ntlist)
+
+    # # Exportar a tabela para um arquivo Excel
+    # df.to_excel("parsing_table.xlsx", sheet_name="Parsing Table")
+
+    # print("Tabela exportada para 'parsing_table.xlsx'.")
     return (mat, grammar_is_LL, terminals)
  
  
@@ -317,20 +316,19 @@ def validateStringUsingStackBuffer(parsing_table, grammarll1,
     buffer = []
  
     # reverse input string store in buffer
-    input_string = input_string.split()
     input_string.reverse()
     buffer = ['$'] + input_string
  
-    print("{:>20} {:>20} {:>20}".
-          format("Buffer", "Stack","Action"))
+    # print("{:>20} {:>20} {:>20}".
+    #       format("Buffer", "Stack","Action"))
  
     while True:
         # end loop if all symbols matched
         if stack == ['$'] and buffer == ['$']:
-            print("{:>20} {:>20} {:>20}"
-                  .format(' '.join(buffer),
-                          ' '.join(stack),
-                          "Valid"))
+            # print("{:>20} {:>20} {:>20}"
+            #       .format(' '.join(buffer),
+            #               ' '.join(stack),
+            #               "Valid"))
             return "\nValid String!"
         elif stack[0] not in term_userdef:
             # take font of buffer (y) and tos (x)
@@ -353,18 +351,18 @@ def validateStringUsingStackBuffer(parsing_table, grammarll1,
         else:
             # stack top is Terminal
             if stack[0] == buffer[-1]:
-                print("{:>20} {:>20} {:>20}"
-                      .format(' '.join(buffer),
-                              ' '.join(stack),
-                              f"Matched:{stack[0]}"))
+                # print("{:>20} {:>20} {:>20}"
+                #       .format(' '.join(buffer),
+                #               ' '.join(stack),
+                #               f"Matched:{stack[0]}"))
                 buffer = buffer[:-1]
                 stack = stack[1:]
             else:
-                print(f'buffer: {buffer}\nstack:{stack}')
+                # print(f'buffer: {buffer}\nstack:{stack}')
                 return "\nInvalid String! " \
                        "Unmatched terminal symbols"
 
-
+sample_input_string = None
 
 rules=["PROGRAMA -> LISTAFUNCOES PRINCIPAL",
 "LISTAFUNCOES -> DECFUNCAO LISTAFUNCOES | #",
@@ -463,7 +461,8 @@ nonterm_userdef=[
     "FATOR",
     "TERMO",
     "SINAL",
-    "CONSTANTE"]
+    "CONSTANTE"
+]
 
 term_userdef=[
     "(",
@@ -500,8 +499,8 @@ term_userdef=[
     "*",
     "/",
     "%",
-    "!"]
-
+    "!"
+]
 
 diction = {}
 firsts = {}
@@ -520,13 +519,12 @@ computeAllFollows()
 (parsing_table, result, tabTerm) = createParseTable()
 
 # validate string input using stack-buffer concept
-def analyze_syntax(file):
-    import dataReader
-    sample_input_string=dataReader.readFullFile(file)
+def analyze_syntax(tokens):
+    sample_input_string=tokens
     if sample_input_string != None:
         validity = validateStringUsingStackBuffer(parsing_table, result,
                                                 tabTerm, sample_input_string,
                                                 term_userdef,start_symbol)
         print(validity)
     else:
-        print("\nNo input String detected")
+        print("\nLexical error, parser can't initialize")
